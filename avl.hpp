@@ -98,4 +98,17 @@ public:
     this->size_++;
     return newNode;
   }
+  int height(Node *node) {
+    if(!node)
+      return -1;
+    int leftheight = height(node->getLeft());
+    int rightheight = height(node->getRight());
+    if(leftheight > rightheight)
+      return leftheight + 1;
+    return rightheight + 1;
+  }
+  int getBalenceFactor(Node* node)
+{
+    return (height(node->getLeft()), height(node->getRight()));
+  }
 };
