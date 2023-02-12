@@ -166,7 +166,7 @@ public:
     if (child)
       child->setParent(parent);
     if (child && !child->getParent())
-      node->setRoot(child);
+      this->setRoot(child);
     return node;
   }
 
@@ -174,7 +174,6 @@ public:
     Node *child = node->getLeft();
     Node *parent = node->getParent();
 
-    // std::cout<< "here " << std::endl;
     node->setLeft(child ? child->getRight() : NULL);
     if (child)
       child->setParent(parent);
@@ -187,6 +186,13 @@ public:
     node->setParent(child);
     if (child && !child->getParent())
       this->setRoot(child);
+    return node;
+  }
+
+  Node* rotateLeftRight(Node* node) {
+    std::cout << "method has been callled"<< std::endl;
+    this->rotateLeft(node);
+    this->rotateRight(node->getParent()->getParent());
     return node;
   }
 };
