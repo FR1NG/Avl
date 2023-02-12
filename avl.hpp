@@ -190,9 +190,14 @@ public:
   }
 
   Node* rotateLeftRight(Node* node) {
-    std::cout << "method has been callled"<< std::endl;
     this->rotateLeft(node);
     this->rotateRight(node->getParent()->getParent());
+    return node;
+  }
+
+  Node *rotateRightLeft(Node *node) {
+    this->rotateRight(node);
+    this->rotateLeft(node->getParent()->getParent());
     return node;
   }
 };

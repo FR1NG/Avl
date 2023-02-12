@@ -18,12 +18,13 @@ int main ()
 
   avl.insert(pair(100, 42));
   avl.insert(pair(200, 42));
-  avl.insert(pair(80, 42));
-  avl.insert(pair(95, 42));
+  avl.insert(pair(150, 42));
 
-  Node* toRotate = avl.getRoot()->getLeft();
-  avl.rotateLeftRight(toRotate);
+  Node* toRotate = avl.getRoot()->getRight();
+  avl.rotateRightLeft(toRotate);
   std::cout << avl.getRoot()->getKey() << std::endl;
+  std::cout << avl.getRoot()->getRight()->getKey() << std::endl;
+  std::cout << avl.getRoot()->getLeft()->getKey() << std::endl;
   // std::cout << avl.getRoot()->getRight()->getKey() << std::endl;
 
   return 0;

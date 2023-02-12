@@ -49,6 +49,7 @@ The AVL tree is created using the Avl class. The following are its properties an
 - rotateLeft(Node *node): rotates the given node to the left
 - rotateRight(Node *node): rotates the given node to the right
 - rotateLeftRight(Node *node): left-right rotate the given node
+- rotateRightLeft(Node *node): right-left rotate the given node
 ## Example Usage:
 ```c++
 int main() {
