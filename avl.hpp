@@ -1,6 +1,5 @@
 #pragma once
 #include <exception>
-#include <ios>
 #include <iostream>
 #include <stdexcept>
 #include <sys/_types/_size_t.h>
@@ -29,28 +28,65 @@ public:
     typedef value_type *pinter;
     typedef value_type &reference;
 
-    Node() : data_(NULL), left_(NULL), right_(NULL), comparer_(Compare()), parent_(NULL) {}
+    Node() : data_(NULL), left_(NULL), right_(NULL), parent_(NULL), comparer_(Compare()) {}
 
     Node(const Type &data)
-        : data_(new value_type(data)), left_(NULL), right_(NULL), comparer_(Compare()), parent_(NULL){}
+        : data_(new value_type(data)), left_(NULL), right_(NULL), parent_(NULL), comparer_(Compare()){}
 
     Node *getLeft() const { return this->left_; }
 
     Node *getRight() const { return this->right_; }
 
+    Node *getParent() const { return this->parent_; }
+
     void setLeft(Node *node) {
       this->left_ = node;
-      node->parent_ = this;
+      if(node)
+        node->setParent(this);
     }
 
     void setRight(Node *node) {
       this->right_ = node;
-      node->parent_ = this;
+      if(node)
+        node->setParent(this);
     }
 
-    Key getKey() const { return this->data_->first; }
+    void setParent(Node *node) { this->parent_ = node; }
 
-    Value getValue() const { return this->data_->second; }
+    Key getKey() const {
+      if (!data_)
+        throw std::runtime_error("trying to get key of null node");
+      return this->data_->first;
+    }
+
+    Value getValue() const {
+      if (!data_)
+        throw std::runtime_error("trying to get value of null node");
+      return this->data_->second;
+    }
+
+    Node *RotateLeft() {
+      // getting the parent and the right child
+      Node *child = this->getRight();
+      Node *parent = this->getParent();
+
+      // assinging the child to his el grande padre to become his padre 
+      if(this == this->getParent()->getRight())
+        this->getParent()->setRight(child);
+      else
+        this->getParent()->setLeft(child);
+
+      if (child)
+        this->setRight(child->getLeft());
+      else
+        this->setRight(NULL);
+      if(child)
+        child->setLeft(this);
+      this->setParent(child);
+      if(child)
+        child->setParent(parent);
+      return this;
+    }
 
     bool operator<(const Node &node) {
       return comparer_(this->getKey(), node.getKey());
@@ -119,8 +155,8 @@ public:
       return leftheight + 1;
     return rightheight + 1;
   }
-  int getBalenceFactor(Node* node)
-{
+  int getBalenceFactor(Node *node) {
     return (height(node->getLeft()), height(node->getRight()));
   }
+
 };

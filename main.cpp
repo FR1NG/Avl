@@ -16,21 +16,21 @@ int main ()
 {
   Avl<int, int> avl;
 
-  try {
-  avl.insert(pair(2, 42));
-  avl.insert(pair(1, 13));
-  avl.insert(pair(3, 1337));
-  avl.insert(pair(4, 1337));
-  avl.insert(pair(-1, 1337));
-  avl.insert(pair(5, 1337));
-    int i = avl.height(avl.getRoot());
-    int factor = avl.getBalenceFactor(avl.getRoot());
-    std::cout << "height is : " << i << std::endl;
-    std::cout << "balence factor is : " << factor << std::endl;
-  } catch (...) {
+  avl.insert(pair(5, 42));
+  avl.insert(pair(3, 42));
+  avl.insert(pair(7, 42));
+  avl.insert(pair(1, 42));
+  avl.insert(pair(4, 42));
+  avl.insert(pair(6, 42));
+  avl.insert(pair(9, 42));
+  avl.insert(pair(8, 42));
 
-    std::cout << "exception has been catched" << std::endl;
-    
-  }
+  Node* toRotate = avl.getRoot()->getRight();
+
+  // std::cout << toRotate->getKey() << std::endl;
+  toRotate->RotateLeft();
+  Node* root = avl.getRoot();
+
+  std::cout << root->getRight()->getLeft()->getRight()->getKey() << std::endl;
   return 0;
 }
