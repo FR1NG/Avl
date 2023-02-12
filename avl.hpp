@@ -1,5 +1,6 @@
 #pragma once
 #include <exception>
+#include <ios>
 #include <iostream>
 #include <stdexcept>
 #include <sys/_types/_size_t.h>
@@ -31,17 +32,10 @@ public:
         : data_(new value_type(data)), left_(NULL), right_(NULL), comparer_(Compare()){}
     Node *getLeft() const { return this->left_; }
     Node *getRight() const { return this->right_; }
-    void setLeft(Node *node) {
-      std::cout << "left set has been called to set : " << node->getKey()
-                << " left to: " << this->getKey() << std::endl;
-      this->left_ = node;
-    }
-    void setRigh(Node *node) {
-      std::cout << "right set has been called to set : " << node->getKey()
-                << " right to: " << this->getKey() << std::endl;
-      this->right_ = node;
-    }
+    void setLeft(Node *node) { this->left_ = node; }
+    void setRight(Node *node) { this->right_ = node; }
     Key getKey() const { return this->data_->first; }
+    Value getValue() const { return this->data_->second; }
     bool operator<(const Node &node) {
       return comparer_(this->getKey(), node.getKey());
     }
@@ -67,7 +61,7 @@ private:
       if (parent->getRight())
         recursive_insert_(node, parent->getRight());
       else
-        parent->setRigh(node);
+        parent->setRight(node);
     }
   }
 
@@ -90,7 +84,7 @@ public:
       else if (*newNode == *root)
           throw std::runtime_error("duplicated key");
       else
-        root->setRigh(newNode);
+        root->setRight(newNode);
       this->size_++;
       return newNode;
     }

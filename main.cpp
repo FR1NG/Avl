@@ -21,6 +21,12 @@ int main ()
   avl.insert(pair(1, 13));
   avl.insert(pair(3, 1337));
   avl.insert(pair(4, 1337));
+  avl.insert(pair(-1, 1337));
+  avl.insert(pair(5, 1337));
+    int i = avl.height(avl.getRoot());
+    int factor = avl.getBalenceFactor(avl.getRoot());
+    std::cout << "height is : " << i << std::endl;
+    std::cout << "balence factor is : " << factor << std::endl;
   } catch (...) {
 
     std::cout << "exception has been catched" << std::endl;
