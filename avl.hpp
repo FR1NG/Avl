@@ -21,27 +21,45 @@ public:
     Type *data_;
     Node *left_;
     Node *right_;
+    Node *parent_;
     Compare comparer_;
 
   public:
     typedef Type value_type;
     typedef value_type *pinter;
     typedef value_type &reference;
-    Node() : data_(NULL), left_(NULL), right_(NULL), comparer_(Compare()) {}
+
+    Node() : data_(NULL), left_(NULL), right_(NULL), comparer_(Compare()), parent_(NULL) {}
+
     Node(const Type &data)
-        : data_(new value_type(data)), left_(NULL), right_(NULL), comparer_(Compare()){}
+        : data_(new value_type(data)), left_(NULL), right_(NULL), comparer_(Compare()), parent_(NULL){}
+
     Node *getLeft() const { return this->left_; }
+
     Node *getRight() const { return this->right_; }
-    void setLeft(Node *node) { this->left_ = node; }
-    void setRight(Node *node) { this->right_ = node; }
+
+    void setLeft(Node *node) {
+      this->left_ = node;
+      node->parent_ = this;
+    }
+
+    void setRight(Node *node) {
+      this->right_ = node;
+      node->parent_ = this;
+    }
+
     Key getKey() const { return this->data_->first; }
+
     Value getValue() const { return this->data_->second; }
+
     bool operator<(const Node &node) {
       return comparer_(this->getKey(), node.getKey());
     }
+
     bool operator==(const Node &node) {
       return (this->getKey() == node.getKey());
     }
+
     ~Node() { delete data_; }
   };
   // node class [ end ]
