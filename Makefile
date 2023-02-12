@@ -12,4 +12,7 @@ $(NAME): $(SRC)
 clean:
 	rm -rf $(NAME)
 
+test: re
+	clear 
+	./avl
 re: clean all
