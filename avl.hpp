@@ -1,9 +1,11 @@
 #pragma once
+
 #include <exception>
 #include <iostream>
 #include <stdexcept>
 #include <sys/_types/_size_t.h>
 #include <utility>
+
 
 template <class Key, class Value, class Type = std::pair<Key, Value>,
           class Compare = std::less<Key>,
@@ -13,6 +15,7 @@ public:
   typedef Type value_type;
   typedef value_type *pointer;
   typedef value_type &reference;
+
   typedef size_t size_type;
   // Node class [ begin ]
   class Node {
@@ -22,6 +25,7 @@ public:
     Node *right_;
     Node *parent_;
     Compare comparer_;
+
 
   public:
     typedef Type value_type;
@@ -77,7 +81,6 @@ public:
     bool operator==(const Node &node) {
       return (this->getKey() == node.getKey());
     }
-
     ~Node() { delete data_; }
   };
   // node class [ end ]
