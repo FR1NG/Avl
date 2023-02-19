@@ -137,25 +137,26 @@ public:
     try{
       newNode = insert_node(newNode);
       this->rebalence(newNode);
-    } catch(...) {
+    } catch (...) {
       delete newNode;
       return NULL;
     }
-  return newNode;
+    return newNode;
   }
 
   void rebalence(Node *node) {
-Node *currentNode = node;
+    Node *currentNode = node;
+    int factor = 0;
+    int childFactor = 0;
     while (currentNode) {
-      int factor = this->getBalenceFactor(currentNode);
-      if(factor > 1) {
-        if (currentNode->getLeft() &&  currentNode->getKey() < currentNode->getLeft()->getKey()) {
-          this->rotateRight(currentNode);
+      factor = this->getBalenceFactor(currentNode);
+      if (factor > 1) {
+        childFactor = this->getBalenceFactor(currentNode->getLeft());
+        if (childFactor < 0) {
+          this->rotateLeftRight(currentNode->getLeft());
         } else {
-          Node* tmp = this->rotateLeft(currentNode);
-          
-          std::cout << tmp->getKey() << std::endl;
-          // this->rotateLeftRight(currentNode);
+          std::cout << "entred here : " << childFactor << std::endl;
+          this->rotateRight(currentNode->getLeft());
         }
       }
       // else if (factor < -1) {
@@ -205,7 +206,7 @@ Node *currentNode = node;
       child->setParent(parent);
     if (child && !child->getParent())
       this->setRoot(child);
-    return node;
+    return node->getParent();
   }
 
   Node *rotateRight(Node *node) {
@@ -224,18 +225,16 @@ Node *currentNode = node;
     node->setParent(child);
     if (child && !child->getParent())
       this->setRoot(child);
-    return node;
+    return node->getParent();
   }
 
   Node* rotateLeftRight(Node* node) {
-    this->rotateLeft(node);
-    this->rotateRight(node->getParent()->getParent());
-    return node;
+    Node *tmp = this->rotateLeft(node);
+    return this->rotateRight(tmp->getParent());
   }
 
   Node *rotateRightLeft(Node *node) {
-    this->rotateRight(node);
-    this->rotateLeft(node->getParent()->getParent());
-    return node;
+    Node *tmp = this->rotateRight(node);
+    return this->rotateLeft(tmp->getParent());
   }
 };
