@@ -3,7 +3,6 @@
 #include <exception>
 #include <iostream>
 #include <stdexcept>
-#include <sys/_types/_size_t.h>
 #include <utility>
 
 
@@ -109,8 +108,8 @@ public:
   Avl(const value_type data) : root_(new Node(data)), size_(1) {}
   size_type size() const { return this->size_; }
   Node *getRoot() const { return this->root_; }
-  Node *insert(const value_type data) {
-    Node *newNode = new Node(data);
+
+  Node *insert_node(Node* newNode) {
     Node *root = this->root_;
     if (!root) {
       root_ = newNode;
@@ -131,7 +130,46 @@ public:
     this->size_++;
     return newNode;
   }
-  int height(Node *node) {
+
+  Node* insert(const value_type data)
+{
+    Node *newNode = new Node(data);
+    try{
+      newNode = insert_node(newNode);
+      this->rebalence(newNode);
+    } catch(...) {
+      delete newNode;
+      return NULL;
+    }
+  return newNode;
+  }
+
+  void rebalence(Node *node) {
+Node *currentNode = node;
+    while (currentNode) {
+      int factor = this->getBalenceFactor(currentNode);
+      if(factor > 1) {
+        if (currentNode->getLeft() &&  currentNode->getKey() < currentNode->getLeft()->getKey()) {
+          this->rotateRight(currentNode);
+        } else {
+          Node* tmp = this->rotateLeft(currentNode);
+          
+          std::cout << tmp->getKey() << std::endl;
+          // this->rotateLeftRight(currentNode);
+        }
+      }
+      // else if (factor < -1) {
+      //   if (currentNode->getRight() && currentNode->getKey() > currentNode->getRight()->getKey()) {
+      //     this->rotateLeft(currentNode);
+      //   } else {
+      //     this->rotateRightLeft(currentNode);
+      //   }
+      // }
+      currentNode = currentNode->getParent();
+    }
+  }
+
+  static int height(Node *node) {
     if (!node)
       return -1;
     int leftheight = height(node->getLeft());
@@ -140,8 +178,8 @@ public:
       return leftheight + 1;
     return rightheight + 1;
   }
-  int getBalenceFactor(Node *node) {
-    return (height(node->getLeft()), height(node->getRight()));
+  static int getBalenceFactor(Node *node) {
+    return (height(node->getLeft()) - height(node->getRight()));
   }
 
   void setRoot(Node *node) { this->root_ = node; }
@@ -166,7 +204,7 @@ public:
     if (child)
       child->setParent(parent);
     if (child && !child->getParent())
-      node->setRoot(child);
+      this->setRoot(child);
     return node;
   }
 
@@ -174,7 +212,6 @@ public:
     Node *child = node->getLeft();
     Node *parent = node->getParent();
 
-    // std::cout<< "here " << std::endl;
     node->setLeft(child ? child->getRight() : NULL);
     if (child)
       child->setParent(parent);
@@ -187,6 +224,18 @@ public:
     node->setParent(child);
     if (child && !child->getParent())
       this->setRoot(child);
+    return node;
+  }
+
+  Node* rotateLeftRight(Node* node) {
+    this->rotateLeft(node);
+    this->rotateRight(node->getParent()->getParent());
+    return node;
+  }
+
+  Node *rotateRightLeft(Node *node) {
+    this->rotateRight(node);
+    this->rotateLeft(node->getParent()->getParent());
     return node;
   }
 };
