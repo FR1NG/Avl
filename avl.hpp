@@ -155,17 +155,16 @@ public:
         if (childFactor < 0) {
           this->rotateLeftRight(currentNode->getLeft());
         } else {
-          std::cout << "entred here : " << childFactor << std::endl;
-          this->rotateRight(currentNode->getLeft());
+          this->rotateRight(currentNode);
         }
       }
-      // else if (factor < -1) {
-      //   if (currentNode->getRight() && currentNode->getKey() > currentNode->getRight()->getKey()) {
-      //     this->rotateLeft(currentNode);
-      //   } else {
-      //     this->rotateRightLeft(currentNode);
-      //   }
-      // }
+      else if (factor < -1) {
+        if (childFactor > 0) {
+          this->rotateRightLeft(currentNode->getRight());
+        } else {
+          this->rotateLeft(currentNode);
+        }
+      }
       currentNode = currentNode->getParent();
     }
   }
